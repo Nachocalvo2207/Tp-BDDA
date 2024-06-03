@@ -65,10 +65,114 @@ CREATE TABLE clinica.Estudio
     FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
 );  
 
+
+--Tabla Cobertura(id cobertura, imagen de la credencial, nro de socio, fecha de registro)
+--Una cobertura puede tener un solo paciente, un paciente pude tener una cobertura
+
+CREATE TABLE clinica.Cobertura
+(
+    Id_Cobertura INT PRIMARY KEY,
+    Imagen_Credencial VARCHAR(100) NOT NULL,
+    Nro_Socio VARCHAR(50) NOT NULL,
+    Fecha_Registro DATETIME NOT NULL,
+    Id_Historia_Clinica INT NOT NULL,
+    FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
+);
+
+--Tabla Prestador(Id prestador, nombre prestador, plan prestador)
+--Un prestador tiene una cobertura, una cobertura tiene un prestador
+
+CREATE TABLE clinica.Prestador
+(
+    Id_Prestador INT PRIMARY KEY,
+    Nombre_Prestador VARCHAR(50) NOT NULL,
+    Plan_Prestador VARCHAR(50) NOT NULL,
+    Id_Cobertura INT NOT NULL,
+    FOREIGN KEY (Id_Cobertura) REFERENCES clinica.Cobertura(Id_Cobertura)
+);
+
+--Tabla Domicilio(id domicilio, calle, numero, piso, departamento, codigo postal, pais, provincia, localidad)
+--Un domicilio puede tener un paciente, un paciente puede tener un domicilio
+
+CREATE TABLE clinica.Domicilio
+(
+    Id_Domicilio INT PRIMARY KEY,
+    Calle VARCHAR(50) NOT NULL,
+    Numero VARCHAR(50) NOT NULL,
+    Piso VARCHAR(50) NOT NULL,
+    Departamento VARCHAR(50) NOT NULL,
+    Codigo_Postal VARCHAR(50) NOT NULL,
+    Pais VARCHAR(50) NOT NULL,
+    Provincia VARCHAR(50) NOT NULL,
+    Localidad VARCHAR(50) NOT NULL,
+    Id_Historia_Clinica INT NOT NULL,
+    FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
+);
+
+--Tabla reserva de turno medico(id turno, fecha, hora, id_medico, id_especialidad, id direccion atencion, id estado turno, id tipo turno)
+
+CREATE TABLE clinica.Reserva_Turno_Medico
+(
+    Id_Turno INT PRIMARY KEY,
+    Fecha DATE NOT NULL,
+    Hora TIME NOT NULL,
+    Id_Medico INT NOT NULL,
+    Id_Especialidad INT NOT NULL,
+    Id_Direccion_Atencion INT NOT NULL,
+    Id_Estado_Turno INT NOT NULL,
+    Id_Tipo_Turno INT NOT NULL
+);
+
+--Tabla estado turno(id estado, nombre estado)
+
+CREATE TABLE clinica.Estado_Turno
+(
+    Id_Estado INT PRIMARY KEY,
+    Nombre_Estado VARCHAR(50) NOT NULL
+);
+
+--Tabla tipo turno(id tipo turno, nombre tipo turno)
+CREATE TABLE clinica.Tipo_Turno
+(
+    Id_Tipo_Turno INT PRIMARY KEY,
+    Nombre_Tipo_Turno VARCHAR(50) NOT NULL
+);
+
+--Tabla dias por sede(id_sede, id medico, dia, hora inicio)
+
+CREATE TABLE clinica.Dias_Por_Sede
+(
+    Id_Sede INT PRIMARY KEY,
+    Id_Medico INT NOT NULL,
+    Dia VARCHAR(50) NOT NULL,
+    Hora_Inicio TIME NOT NULL
+);
+
+--Tabla medico(id medico, nombre, apellido, nro matricula)
+
+CREATE TABLE clinica.Medico
+(
+    Id_Medico INT PRIMARY KEY,
+    Nombre VARCHAR(50) NOT NULL,
+    Apellido VARCHAR(50) NOT NULL,
+    Nro_Matricula VARCHAR(50) NOT NULL
+);
+
+--Tabla especialidad(id especialidad, nombre especialidad)
+
+CREATE TABLE clinica.Especialidad
+(
+    Id_Especialidad INT PRIMARY KEY,
+    Nombre_Especialidad VARCHAR(50) NOT NULL
+);
+
+
+
 CREATE TABLE clinica.Sede_De_Atencion
 {
     Id_Sede INT PRIMARY KEY
     ,Nombre_De_Sede VARCHAR(50) NOT NULL
     ,Direccion VARCHAR(100) NOT NULL
 };
-}
+
+
