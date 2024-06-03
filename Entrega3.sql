@@ -28,36 +28,47 @@ CREATE TABLE clinica.Paciente
     Foto_Perfil VARCHAR(100),
     Mail VARCHAR(50) NOT NULL,
     Telefono_Fijo VARCHAR(20),
-    Telefono_Contacto_Alternativo VARCHAR(20) NOT NULL,
-    Telefono_Laboral VARCHAR(20) NOT NULL,
+    Telefono_Contacto_Alternativo VARCHAR(20),
+    Telefono_Laboral VARCHAR(20),
     Fecha_Registro DATETIME NOT NULL,
-    Fecha_Actualizacion DATETIME NOT NULL,
+    Fecha_Actualizacion DATETIME,
     Usuario_Actualizacion VARCHAR(50) NOT NULL
 );
 
 --Tabla usuario (id usuario, contraseña, fecha de creacion)
 --Un usuario puede tener un paciente, un paciente puede tener un usuario
 
+--Tabla usuario (ID usuario, contraseña, fecha de creación)
+--Un usuario puede tener un paciente, un paciente puede tener un usuario
+
 CREATE TABLE clinica.Usuario
 (
-    idUsuario INT PRIMARY KEY,
-    contraseña VARCHAR(50) NOT NULL,
-    fechaCreacion DATETIME NOT NULL,
-    idHistoriaClinica INT NOT NULL,
-    FOREIGN KEY (idHistoriaClinica) REFERENCES clinica.Paciente(idHistoriaClinica)
+    Id_Usuario INT PRIMARY KEY,
+    Contraseña VARCHAR(50) NOT NULL,
+    Fecha_Creacion DATETIME NOT NULL,
+    Id_Historia_Clinica INT NOT NULL,
+    FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
 );
 
---Tabla estudio(id estudio, fecha, nombre estudio, autoriazado, documento resultado, imagen resultado)
+--Tabla estudio (ID estudio, fecha, nombre estudio, autorizado, documento resultado, imagen resultado)
 --Un estudio puede tener un solo paciente, pero un paciente puede tener varios estudios
 
 CREATE TABLE clinica.Estudio
 (
-    idEstudio INT PRIMARY KEY,
-    fecha DATE NOT NULL,
-    nombreEstudio VARCHAR(50) NOT NULL,
-    autorizado BIT NOT NULL,
-    documentoResultado VARCHAR(100) NOT NULL,
-    imagenResultado VARCHAR(100) NOT NULL,
-    idHistoriaClinica INT NOT NULL,
-    FOREIGN KEY (idHistoriaClinica) REFERENCES clinica.Paciente(idHistoriaClinica)
+    Id_Estudio INT PRIMARY KEY,
+    Fecha DATE NOT NULL,
+    Nombre_Estudio VARCHAR(50) NOT NULL,
+    Autorizado INT NOT NULL,
+    Documento_Resultado VARCHAR(100) NOT NULL,
+    Imagen_Resultado VARCHAR(100) NOT NULL,
+    Id_Historia_Clinica INT NOT NULL,
+    FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
 );  
+
+CREATE TABLE clinica.Sede_De_Atencion
+{
+    Id_Sede INT PRIMARY KEY
+    ,Nombre_De_Sede VARCHAR(50) NOT NULL
+    ,Direccion VARCHAR(100) NOT NULL
+};
+}
