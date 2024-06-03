@@ -1,9 +1,21 @@
--- Microsoft SQL Server query
+--la fecha de entrega, número de grupo, nombre de la materia, nombres y DNI de los alumnos.  
 
-CREATE DATABASE BD_Clinica;
+/*--------------------------------------------------------------
+* Fecha de entrega:
+
+* NUMERO DE GRUPO: 3
+* NOMBRE DE LA MATERIA: Base de Datos Aplicada
+* NOMBRE Y DNI DE LOS ALUMNOS: 
+    1. Calvo Ignacio, 411162300
+    2. Rossendy Federico, xxxxxxxxx
+    3. Veliz Nicolas, xxxxxxxx
+--------------------------------------------------------------*/
+
+
+CREATE DATABASE Com2900G03;
 GO
 
-USE BD_Clinica;
+USE Com2900G03;
 GO
 
 CREATE SCHEMA Clinica;
@@ -99,8 +111,8 @@ CREATE TABLE clinica.Domicilio
     Id_Domicilio INT PRIMARY KEY,
     Calle VARCHAR(50) NOT NULL,
     Numero VARCHAR(50) NOT NULL,
-    Piso VARCHAR(50) NOT NULL,
-    Departamento VARCHAR(50) NOT NULL,
+    Piso VARCHAR(50),
+    Departamento VARCHAR(50),
     Codigo_Postal VARCHAR(50) NOT NULL,
     Pais VARCHAR(50) NOT NULL,
     Provincia VARCHAR(50) NOT NULL,
@@ -144,7 +156,7 @@ CREATE TABLE clinica.Dias_Por_Sede
 (
     Id_Sede INT PRIMARY KEY,
     Id_Medico INT NOT NULL,
-    Dia VARCHAR(50) NOT NULL,
+    Dia VARCHAR(20) NOT NULL,
     Hora_Inicio TIME NOT NULL
 );
 
@@ -167,12 +179,21 @@ CREATE TABLE clinica.Especialidad
 );
 
 
+--Tabla sedes de atencion (id sede, nombre de sede, direccion)
+-- N a 1 con la Dias_Por_Sede
 
 CREATE TABLE clinica.Sede_De_Atencion
 {
-    Id_Sede INT PRIMARY KEY
-    ,Nombre_De_Sede VARCHAR(50) NOT NULL
-    ,Direccion VARCHAR(100) NOT NULL
+    Id_Sede INT PRIMARY KEY,
+    Nombre_Sede VARCHAR(50) NOT NULL,
+    Direccion VARCHAR(50) NOT NULL
 };
 
 
+--Genere store procedures para manejar la inserción, modificado, borrado (si corresponde, también debe decidir si determinadas entidades solo admitirán borrado lógico) de cada tabla. Los nombres de los store procedures NO deben comenzar con “SP”.  
+
+
+
+--SP_Insertar_Paciente
+
+CREATE PROCEDURE 
