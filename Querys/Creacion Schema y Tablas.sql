@@ -18,7 +18,8 @@ IF NOT EXISTS(SELECT name FROM master.dbo.sysdatabases WHERE name = 'Com2900G03'
 BEGIN 
     CREATE DATABASE Com2900G03;
 END
-USE Com2900G03;
+
+USE Com2900G03
 GO
 
 
@@ -27,7 +28,6 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'Clinica')
 BEGIN
     EXEC('CREATE SCHEMA Clinica')
 END
-CREATE SCHEMA Clinica
 GO
 
 
@@ -51,9 +51,9 @@ BEGIN
         Telefono_Fijo VARCHAR(20),
         Telefono_Contacto_Alternativo VARCHAR(20),
         Telefono_Laboral VARCHAR(20),
-        Fecha_Registro DATETIME NOT NULL,
+        Fecha_Registro DATE DEFAULT GETDATE(),
         Fecha_Actualizacion DATETIME,
-        Usuario_Actualizacion VARCHAR(50) NOT NULL
+        Usuario_Actualizacion VARCHAR(50)
     );
 END
 
@@ -65,7 +65,7 @@ BEGIN
     (
         Id_Usuario INT PRIMARY KEY,
         Contraseña VARCHAR(50) NOT NULL,
-        Fecha_Creacion DATETIME NOT NULL,
+        Fecha_Creacion DATE DEFAULT GETDATE(),
         Id_Historia_Clinica INT NOT NULL,
         FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
     );
@@ -81,7 +81,7 @@ BEGIN
         Nombre_Estudio VARCHAR(50) NOT NULL,
         Autorizado INT NOT NULL,
         Documento_Resultado VARCHAR(100) NOT NULL,
-        Imagen_Resultado VARCHAR(100) NOT NULL,
+        Imagen_Resultado VARCHAR(100),
         Id_Historia_Clinica INT NOT NULL,
         FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
     );
@@ -94,7 +94,7 @@ BEGIN
     CREATE TABLE clinica.Cobertura
     (
         Id_Cobertura INT PRIMARY KEY,
-        Imagen_Credencial VARCHAR(100) NOT NULL,
+        Imagen_Credencial VARCHAR(100),
         Nro_Socio VARCHAR(50) NOT NULL,
         Fecha_Registro DATETIME NOT NULL,
         Id_Historia_Clinica INT NOT NULL,

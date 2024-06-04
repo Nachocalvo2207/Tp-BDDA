@@ -31,9 +31,27 @@ CREATE PROCEDURE clinicaEliminar.Eliminar_Usuario
 )
 AS
 BEGIN
+-- Creo LOG para que quede registro de usuarios eliminados:
+    IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'UsuarioEliminado' AND TABLE_SCHEMA = 'clinica')
+    BEGIN
+        CREATE TABLE clinica.UsuarioEliminado
+        (
+            Id_Usuario INT PRIMARY KEY,
+            Contraseña VARCHAR(50) NOT NULL,
+            Fecha_Creacion DATETIME NOT NULL,
+            Fecha_Eliminacion DATETIME DEFAULT GETDATE(),
+            Id_Historia_Clinica INT NOT NULL,
+            FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
+        );
+    END
+
+    INSERT INTO clinica.UsuarioEliminado (Id_Usuario, Contraseña, Fecha_Creacion, Id_Historia_Clinica)
+    SELECT Id_Usuario, Contraseña, Fecha_Creacion, Id_Historia_Clinica FROM clinica.Usuario
+    WHERE Id_Usuario = @Id_Usuario;
+
     DELETE FROM clinica.Usuario
     WHERE Id_Usuario = @Id_Usuario;
-END;
+END
 GO
 
 --Eliminar Estudio
