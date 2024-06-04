@@ -7,7 +7,7 @@
 * NOMBRE DE LA MATERIA: Base de Datos Aplicada
 * NOMBRE Y DNI DE LOS ALUMNOS: 
     1. Calvo Ignacio, 411162300
-    2. Rossendy Federico, xxxxxxxxx
+    2. Rossendy Federico, 37804899
     3. Veliz Nicolas, xxxxxxxx
 --------------------------------------------------------------*/
 
