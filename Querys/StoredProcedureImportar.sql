@@ -9,37 +9,41 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'clinicaImportar')
     EXEC('CREATE SCHEMA clinicaImportar')
 GO
 
+ALTER DATABASE MiBaseDeDatos
+COLLATE Latin1_General_CI_AS;
+
 CREATE PROCEDURE clinicaImportar.ImportarPacientes
 AS
 BEGIN
     -- 1. Crear la tabla temporal
-    DROP TABLE clinicaImportar.PacienteTemporal;
+    DROP TABLE clinica.PacienteTemporal;
 
-    CREATE TABLE clinicaImportar.PacienteTemporal
+    CREATE TABLE clinica.PacienteTemporal
     (
-        Nombre VARCHAR(50) COLLATE Modern_Spanish_CI_AS NOT NULL,
-        Apellido VARCHAR(50) COLLATE Modern_Spanish_CI_AS NOT NULL,
-        Fecha_Nacimiento VARCHAR(15) NOT NULL,
-        Tipo_Documento VARCHAR(10) NOT NULL,
+        Nombre VARCHAR(50) COLLATE Latin1_General_CI_AS,
+        Apellido VARCHAR(50) COLLATE Latin1_General_CI_AS,
+        Fecha_Nacimiento VARCHAR(15) COLLATE Latin1_General_CI_AS NOT NULL,
+        Tipo_Documento VARCHAR(10) COLLATE Latin1_General_CI_AS NOT NULL,
         DNI INT NOT NULL,
-        Sexo VARCHAR(9) NOT NULL CHECK (Sexo IN ('Masculino', 'Femenino')),
-        Genero VARCHAR(10) NOT NULL,
-        Telefono VARCHAR(20) NOT NULL,
-        Nacionalidad VARCHAR(50) NOT NULL,
-        Email VARCHAR(50) NOT NULL,
-        Direccion VARCHAR(100) COLLATE Modern_Spanish_CI_AS NOT NULL,
-        Localidad VARCHAR(75) COLLATE Modern_Spanish_CI_AS NOT NULL,
-        Provincia VARCHAR(57) COLLATE Modern_Spanish_CI_AS NOT NULL
+        Sexo VARCHAR(9) COLLATE Latin1_General_CI_AS NOT NULL CHECK (Sexo IN ('Masculino', 'Femenino')),
+        Genero VARCHAR(10) COLLATE Latin1_General_CI_AS NOT NULL,
+        Telefono VARCHAR(20) COLLATE Latin1_General_CI_AS NOT NULL,
+        Nacionalidad VARCHAR(50) COLLATE Latin1_General_CI_AS NOT NULL,
+        Email VARCHAR(50) COLLATE Latin1_General_CI_AS NOT NULL,
+        Direccion VARCHAR(100) COLLATE Latin1_General_CI_AS,
+        Localidad VARCHAR(75) COLLATE Latin1_General_CI_AS,
+        Provincia VARCHAR(57) COLLATE Latin1_General_CI_AS
     );
 
     -- 2. Importar los datos del archivo CSV
-    BULK INSERT clinicaImportar.PacienteTemporal
-    FROM 'C:\Users\fede0\Desktop\BDDA\Tp-BDDA\Tp-BDDA\Dataset\Pacientes.csv'
+    BULK INSERT clinica.PacienteTemporal
+    FROM 'C:\Users\ic255011\OneDrive - Teradata\Escritorio\Nacho\Unlam\GitHub\Tp-BDDA\Dataset\Pacientes.csv'
     WITH
     (
         FIELDTERMINATOR = ';',
         ROWTERMINATOR = '\n',
-        FIRSTROW = 2
+        FIRSTROW = 2,
+		CODEPAGE = '65001' -- UTF-8, permite que se inserten los tildes y caracteres especiales
     );
 
     -- 3. Insertar los datos en la tabla final
