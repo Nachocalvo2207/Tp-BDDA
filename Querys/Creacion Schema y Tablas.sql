@@ -36,14 +36,14 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Pacie
 BEGIN
     CREATE TABLE clinica.Paciente
     (
-        Id_Historia_Clinica INT PRIMARY KEY,
+        Id_Historia_Clinica INT IDENTITY(1,1) PRIMARY KEY,
         Nombre VARCHAR(50) NOT NULL,
         Apellido VARCHAR(50) NOT NULL,
         Apellido_Materno VARCHAR(50),
         Fecha_Nacimiento DATE NOT NULL,
         Tipo_Documento VARCHAR(10) NOT NULL,
-        Numero_Documento VARCHAR(20) NOT NULL,
-        Sexo_Biologico CHAR(1) NOT NULL,
+        Numero_Documento INT NOT NULL,
+        Sexo_Biologico VARCHAR(10) NOT NULL,
         Genero VARCHAR(20) NOT NULL,
         Nacionalidad VARCHAR(50) NOT NULL,
         Foto_Perfil VARCHAR(100),
