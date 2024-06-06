@@ -190,10 +190,10 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Medic
 BEGIN
     CREATE TABLE clinica.Medico
     (
-        Id_Medico INT PRIMARY KEY,
+        Id_Medico INT IDENTITY(1,1) PRIMARY KEY,
         Nombre VARCHAR(50) NOT NULL,
         Apellido VARCHAR(50) NOT NULL,
-        Nro_Matricula VARCHAR(50) NOT NULL
+        Nro_Matricula INTEGER NOT NULL
     );
 END
 
