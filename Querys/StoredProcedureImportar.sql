@@ -45,9 +45,7 @@ BEGIN
         FIRSTROW = 2,
 		CODEPAGE = '65001' -- UTF-8, permite que se inserten los tildes y caracteres especiales
     );
-UPDATE clinica.tempMedico
-SET nombre = 'Agustina'
-WHERE colegiado = '119901';
+
     -- 3. Insertar los datos en la tabla final
     WHILE (SELECT COUNT(*) FROM clinicaImportar.PacienteTemporal) > 0
     BEGIN

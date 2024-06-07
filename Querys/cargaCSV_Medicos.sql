@@ -43,9 +43,7 @@ BEGIN
     UPDATE clinica.#tempMedico
     SET apellido = REPLACE(apellido, 'Dr. ', '')
 
---Chequeo si la matricula ya existe en la tabla final, si ya existe no lo inserto (suponemos que la matricula es unica):
---    DELETE FROM clinica.#tempMedico
---    WHERE colegiado IN (SELECT Nro_Matricula FROM clinica.Medico)
+
 
 --Updateo tabla clinica medico en caso de que el registro ya exista:
 UPDATE clinica.Medico 

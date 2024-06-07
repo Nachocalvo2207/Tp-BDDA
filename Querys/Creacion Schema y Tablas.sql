@@ -207,12 +207,12 @@ BEGIN
     );
 END
 
-
+DROP IF EXISTS Clinica.Sede_De_Atencion
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Sede_De_Atencion' AND TABLE_SCHEMA = 'clinica')
 BEGIN
     CREATE TABLE clinica.Sede_De_Atencion
     (
-        Id_Sede INT PRIMARY KEY,
+        Id_Sede INT IDENTITY(1,1) PRIMARY KEY,
         Nombre_Sede VARCHAR(50) NOT NULL,
         Direccion VARCHAR(50) NOT NULL
     );
