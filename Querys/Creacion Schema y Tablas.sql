@@ -16,7 +16,7 @@
 -- Se crea la base de datos:
 IF NOT EXISTS(SELECT name FROM master.dbo.sysdatabases WHERE name = 'Com2900G03') 
 BEGIN 
-    CREATE DATABASE Com2900G03;
+    CREATE DATABASE Com2900G03 COLLATE Modern_Spanish_CI_AS;
 END
 
 USE Com2900G03
@@ -207,7 +207,8 @@ BEGIN
     );
 END
 
-DROP IF EXISTS Clinica.Sede_De_Atencion
+IF EXISTS (SELECT * FROM sys.tables WHERE name = 'Sede_De_Atencion' AND schema_id = SCHEMA_ID('clinica'))
+    DROP TABLE clinica.Sede_De_Atencion;
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Sede_De_Atencion' AND TABLE_SCHEMA = 'clinica')
 BEGIN
     CREATE TABLE clinica.Sede_De_Atencion
