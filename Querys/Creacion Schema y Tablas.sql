@@ -93,7 +93,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Cober
 BEGIN
     CREATE TABLE clinica.Cobertura
     (
-        Id_Cobertura INT PRIMARY KEY,
+        Id_Cobertura INT IDENTITY(1,1) PRIMARY KEY,
         Imagen_Credencial VARCHAR(100),
         Nro_Socio VARCHAR(50) NOT NULL,
         Fecha_Registro DATETIME NOT NULL,

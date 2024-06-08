@@ -1,11 +1,3 @@
-USE Com2900G03
-GO
-
-IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'clinicaImportar')
-    EXEC('CREATE SCHEMA clinicaImportar')
-GO
-
-
 CREATE OR ALTER PROCEDURE Clinica.ImportarEstudios
     @rutaArchivo NVARCHAR(MAX)
 AS
@@ -25,9 +17,7 @@ BEGIN
     )
 
     DECLARE @sql NVARCHAR(MAX) = 
-
-    
-    'INSERT INTO clinica.tempEstudio
+    INSERT INTO clinica.tempEstudio
     (
         Id_Estudio,
         Area,
@@ -68,17 +58,6 @@ BEGIN
         Autorizacion VARCHAR(50) ''$."Requiere Autorizacion"''
     )'
 
---Limpio datos(TAN DIFICIL IBA A SER ESTO?,):
---Quitamos Tildes
     EXEC sp_executesql @sql
-
-UPDATE clinica.tempEstudio
-SET Nombre_Estudio = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Nombre_Estudio, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ'),
-    Plan_ = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Plan_, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ');
 END
 GO
-
--- Test
-
-EXEC Clinica.ImportarEstudios 'C:\Users\ic255011\OneDrive - Teradata\Escritorio\Nacho\Unlam\GitHub\Tp-BDDA\Dataset\Centro_Autorizaciones.Estudios clinicos.json'
-

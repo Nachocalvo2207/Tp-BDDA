@@ -97,4 +97,3 @@ DROP TABLE clinica.#tempMedico
 
 END
 
-
