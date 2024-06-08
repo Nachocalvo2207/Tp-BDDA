@@ -5,6 +5,7 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'clinicaImportar')
     EXEC('CREATE SCHEMA clinicaImportar')
 GO
 
+--Funcion para capitalizar strings
 CREATE FUNCTION [Clinica].[InitCap] 
 ( 
     @InputString varchar(4000)
@@ -42,6 +43,8 @@ GO
 
 DROP PROCEDURE IF EXISTS clinicaImportar.ImportarPacientes;
 GO
+
+-- Importar los pacientes desde un archivo CSV
 
 CREATE PROCEDURE Clinica.ImportarPacientes
    @rutaArchivo NVARCHAR(MAX)
