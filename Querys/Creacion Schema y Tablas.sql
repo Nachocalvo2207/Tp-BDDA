@@ -200,7 +200,7 @@ BEGIN
         Nombre VARCHAR(50) NOT NULL,
         Apellido VARCHAR(50) NOT NULL,
         Nro_Matricula INTEGER NOT NULL,
-        Id_Especialidad INT NOT NULL,
+        Id_Especialidad INT,
         FOREIGN KEY (Id_Especialidad) REFERENCES clinica.Especialidad(Id_Especialidad)
     );
 END
@@ -210,7 +210,7 @@ IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Espec
 BEGIN
     CREATE TABLE clinica.Especialidad
     (
-        Id_Especialidad INT PRIMARY KEY,
+        Id_Especialidad INT IDENTITY(1,1)PRIMARY KEY,
         Nombre_Especialidad VARCHAR(50) NOT NULL
     );
 END

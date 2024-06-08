@@ -44,28 +44,53 @@ BEGIN
     SET apellido = REPLACE(apellido, 'Dr. ', '')
 
 
+--Cargo la tabla especialidad:
+
+INSERT INTO clinica.Especialidad
+(
+    Nombre_Especialidad
+)
+SELECT distinct
+    especialidad
+FROM clinica.#tempMedico
+WHERE especialidad NOT IN (SELECT Nombre_Especialidad FROM clinica.Especialidad)
+
 
 --Updateo tabla clinica medico en caso de que el registro ya exista:
 UPDATE clinica.Medico 
 SET
     Nombre = a.Nombre,
-    Apellido = a.Apellido
+    Apellido = a.Apellido,
+    Id_Especialidad = e.Id_Especialidad
 FROM clinica.#tempMedico a
+LEFT JOIN clinica.Especialidad e ON a.especialidad = e.Nombre_Especialidad
 WHERE clinica.Medico.Nro_Matricula = a.colegiado
+--Quiero que updatee si hay algo diferente solamente
+AND
+(
+    clinica.Medico.Nombre != a.Nombre
+    OR clinica.Medico.Apellido != a.Apellido
+    OR clinica.Medico.Id_Especialidad != e.Id_Especialidad
+
+)
 
 --Inserto los datos en la tabla final:
 INSERT INTO clinica.Medico
 (
     Nombre,
     Apellido,
-    Nro_Matricula
+    Nro_Matricula,
+    Id_Especialidad
 )
 SELECT
-    Nombre
-    ,Apellido
-    ,colegiado
-FROM clinica.#tempMedico
+     A.Nombre
+    ,A.Apellido
+    ,A.colegiado
+    ,E.Id_Especialidad
+FROM clinica.#tempMedico A
+LEFT JOIN Clinica.Especialidad e ON a.especialidad = e.Nombre_Especialidad
 WHERE colegiado NOT IN (SELECT Nro_Matricula FROM clinica.Medico)
+
 
 --Limpio la tabla temporal
 DROP TABLE clinica.#tempMedico
