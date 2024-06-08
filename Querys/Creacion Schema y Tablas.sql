@@ -149,7 +149,11 @@ BEGIN
         Id_Especialidad INT NOT NULL,
         Id_Direccion_Atencion INT NOT NULL,
         Id_Estado_Turno INT NOT NULL,
-        Id_Tipo_Turno INT NOT NULL
+        Id_Tipo_Turno INT NOT NULL,
+        FOREIGN KEY (Id_Medico) REFERENCES clinica.Medico(Id_Medico),
+        FOREIGN KEY (Id_Especialidad) REFERENCES clinica.Especialidad(Id_Especialidad),
+        FOREIGN KEY (Id_Direccion_Atencion) REFERENCES clinica.Sede_De_Atencion(Id_Sede),
+        FOREIGN KEY (Id_Estado_Turno) REFERENCES clinica.Estado_Turno(Id_Estado),
     );
 END
 
@@ -182,6 +186,8 @@ BEGIN
         Id_Medico INT NOT NULL,
         Dia VARCHAR(20) NOT NULL,
         Hora_Inicio TIME NOT NULL
+        FOREIGN KEY (Id_Medico) REFERENCES clinica.Medico(Id_Medico),
+        FOREIGN KEY (Id_Sede) REFERENCES clinica.Sede_De_Atencion(Id_Sede)
     );
 END
 
@@ -193,7 +199,9 @@ BEGIN
         Id_Medico INT IDENTITY(1,1) PRIMARY KEY,
         Nombre VARCHAR(50) NOT NULL,
         Apellido VARCHAR(50) NOT NULL,
-        Nro_Matricula INTEGER NOT NULL
+        Nro_Matricula INTEGER NOT NULL,
+        Id_Especialidad INT NOT NULL,
+        FOREIGN KEY (Id_Especialidad) REFERENCES clinica.Especialidad(Id_Especialidad)
     );
 END
 
@@ -207,8 +215,6 @@ BEGIN
     );
 END
 
-IF EXISTS (SELECT * FROM sys.tables WHERE name = 'Sede_De_Atencion' AND schema_id = SCHEMA_ID('clinica'))
-    DROP TABLE clinica.Sede_De_Atencion;
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Sede_De_Atencion' AND TABLE_SCHEMA = 'clinica')
 BEGIN
     CREATE TABLE clinica.Sede_De_Atencion
