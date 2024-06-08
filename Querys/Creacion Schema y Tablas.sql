@@ -154,6 +154,7 @@ BEGIN
         FOREIGN KEY (Id_Especialidad) REFERENCES clinica.Especialidad(Id_Especialidad),
         FOREIGN KEY (Id_Direccion_Atencion) REFERENCES clinica.Sede_De_Atencion(Id_Sede),
         FOREIGN KEY (Id_Estado_Turno) REFERENCES clinica.Estado_Turno(Id_Estado),
+        FOREIGN KEY (Id_Tipo_Turno) REFERENCES clinica.Tipo_Turno(Id_Tipo_Turno)
     );
 END
 
