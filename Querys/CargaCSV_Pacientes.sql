@@ -5,7 +5,13 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'clinicaImportar')
     EXEC('CREATE SCHEMA clinicaImportar')
 GO
 
+DROP PROCEDURE IF EXISTS clinicaImportar.ImportarPacientes;
+GO
+
 --Funcion para capitalizar strings
+DROP FUNCTION IF EXISTS [Clinica].[InitCap] 
+GO
+
 CREATE FUNCTION [Clinica].[InitCap] 
 ( 
     @InputString varchar(4000)
@@ -41,10 +47,50 @@ BEGIN
 END
 GO
 
-DROP PROCEDURE IF EXISTS clinicaImportar.ImportarPacientes;
+DROP FUNCTION IF EXISTS [Clinica].[getFinalNumber]
+GO
+
+CREATE FUNCTION [Clinica].[getFinalNumber] 
+( 
+    @str varchar(100)
+)
+RETURNS varchar(100)
+AS
+BEGIN
+    DECLARE @result varchar(100)
+	SET @str = TRIM(@str)
+    SET @result = RIGHT(@str, patindex('%[^0-9]%', REVERSE(@str))-1)
+    RETURN @result
+END
+GO
+
+DROP FUNCTION IF EXISTS [Clinica].[getFirstString]
+GO
+
+CREATE FUNCTION [Clinica].[getFirstString] 
+( 
+    @str varchar(100)
+)
+RETURNS varchar(100)
+AS
+BEGIN
+    DECLARE @result varchar(100)
+	DECLARE @index int
+	SET @index = patindex('%[0-9]%', @str)
+	SET @str = TRIM(@str)
+	IF @index < 1
+	BEGIN
+		set @index = 1
+	END
+    SET @result = left(@str, @index -1)
+    RETURN @result
+END
 GO
 
 -- Importar los pacientes desde un archivo CSV
+
+DROP PROCEDURE IF EXISTS Clinica.ImportarPacientes
+GO
 
 CREATE PROCEDURE Clinica.ImportarPacientes
    @rutaArchivo NVARCHAR(MAX)
@@ -55,8 +101,8 @@ BEGIN
     DECLARE @sql NVARCHAR(MAX)
 
     -- 1. Crear la tabla temporal
-    DROP TABLE IF EXISTS Clinica.#PacienteTemporal;
-    CREATE TABLE Clinica.#PacienteTemporal
+    DROP TABLE IF EXISTS Clinica.PacienteTemporal
+    CREATE TABLE Clinica.PacienteTemporal
     (
         Nombre VARCHAR(50),
         Apellido VARCHAR(50),
@@ -70,14 +116,29 @@ BEGIN
         Email VARCHAR(50)  NOT NULL,
         Direccion VARCHAR(100),
         Localidad VARCHAR(75),
-        Provincia VARCHAR(57)  
+        Provincia VARCHAR(57),
+    );
+
+	DROP TABLE IF EXISTS Clinica.DomicilioTemporal
+    CREATE TABLE Clinica.DomicilioTemporal
+    (
+        Id_Domicilio INT IDENTITY(1,1) PRIMARY KEY,
+        Direccion VARCHAR(100),
+        Calle VARCHAR(50),
+        Numero VARCHAR(50),
+        Piso VARCHAR(50),
+        Departamento VARCHAR(50),
+        Codigo_Postal VARCHAR(50),
+        Pais VARCHAR(50),
+        Provincia VARCHAR(50),
+        Localidad VARCHAR(50),
     );
 
     -- 2. Importar los datos del archivo CSV
 
     DECLARE @ImportPacientes NVARCHAR(MAX)
     SET @ImportPacientes =
-    'BULK INSERT clinica.#PacienteTemporal ' +
+    'BULK INSERT clinica.PacienteTemporal ' +
     'FROM ''' + @rutaArchivo + ''' ' +
     'WITH ( ' +
     '    FIELDTERMINATOR = '';'', ' +
@@ -89,7 +150,7 @@ BEGIN
     EXEC sp_executesql @ImportPacientes
     
     -- Limpiar los datos:
-    UPDATE clinica.#PacienteTemporal
+    UPDATE Clinica.PacienteTemporal
     SET Nombre = Nombre,
         Apellido = Apellido,
         Fecha_Nacimiento = CONVERT(DATE, Fecha_Nacimiento, 103),
@@ -103,8 +164,53 @@ BEGIN
         Localidad = REPLACE(Localidad, Localidad, [Clinica].[InitCap](Localidad)),
         Provincia = REPLACE(Provincia, Provincia, [Clinica].[InitCap](Provincia));
     
-    -- 3. Insertar los datos en la tabla final
-    
+    -- 3. Insertar los datos en la tabla domicilio temporal
+
+    INSERT INTO Clinica.DomicilioTemporal
+    (
+        Direccion,
+        Pais,
+        Provincia,
+        Localidad
+    )
+    SELECT DISTINCT
+        Direccion,
+        Nacionalidad,
+        Provincia,
+        Localidad
+    FROM Clinica.PacienteTemporal
+	WHERE Direccion NOT IN (SELECT Direccion FROM Clinica.DomicilioTemporal);
+
+    UPDATE Clinica.DomicilioTemporal
+    SET Calle = [Clinica].[getFirstString](Direccion),
+        Numero = [Clinica].[getFinalNumber](Direccion);
+
+    -- 4. Insertar los datos en la tabla domicilio
+
+    INSERT INTO Clinica.Domicilio
+    (
+        Calle,
+        Numero,
+        Piso,
+        Departamento,
+        Codigo_Postal,
+        Pais,
+        Provincia,
+        Localidad
+    )
+    SELECT
+        Calle,
+        Numero,
+        Piso,
+        Departamento,
+        Codigo_Postal,
+        Pais,
+        Provincia,
+        Localidad
+    FROM Clinica.DomicilioTemporal
+    WHERE Calle NOT IN (SELECT Calle FROM Clinica.Domicilio);
+
+    -- 4. Insertar los datos en la tabla paciente
     INSERT INTO Clinica.Paciente
     (
         Nombre,
@@ -116,7 +222,8 @@ BEGIN
         Genero,
         Telefono_Fijo,
         Nacionalidad,
-        Mail
+        Mail,
+        Id_Domicilio
     )
     SELECT
         Nombre,
@@ -128,16 +235,20 @@ BEGIN
         Genero,
         Telefono,
         Nacionalidad,
-        Email
-    FROM Clinica.#PacienteTemporal
+        Email,
+        Id_Domicilio
+    FROM Clinica.PacienteTemporal JOIN Clinica.DomicilioTemporal ON Clinica.PacienteTemporal.Direccion = Clinica.DomicilioTemporal.Direccion
     WHERE DNI NOT IN (SELECT Numero_Documento FROM Clinica.Paciente);
 
-    -- 4. Limpiar la tabla temporal
-    DROP TABLE Clinica.#PacienteTemporal;
+	--SELECT * FROM Clinica.PacienteTemporal INNER JOIN Clinica.DomicilioTemporal 
+	--ON Clinica.PacienteTemporal.Direccion = Clinica.DomicilioTemporal.Direccion
 
-END;
+    -- 5. Limpiar la tabla temporal
+    DROP TABLE Clinica.PacienteTemporal;
+    DROP TABLE Clinica.DomicilioTemporal;
+
+END
 GO
 
-EXEC clinicaImportar.ImportarPacientes 'C:\Users\fede0\Desktop\BDDA\Tp-BDDA\Tp-BDDA\Dataset\Pacientes.csv';
-
+EXEC Clinica.ImportarPacientes 'C:\Users\fede0\Desktop\BDDA\Tp-BDDA\Tp-BDDA\Dataset\Pacientes.csv'
 
