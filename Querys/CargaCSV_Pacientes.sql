@@ -250,5 +250,4 @@ BEGIN
 END
 GO
 
-EXEC Clinica.ImportarPacientes 'C:\Users\fede0\Desktop\BDDA\Tp-BDDA\Tp-BDDA\Dataset\Pacientes.csv'
 
