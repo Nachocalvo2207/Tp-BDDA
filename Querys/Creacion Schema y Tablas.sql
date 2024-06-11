@@ -49,6 +49,16 @@ BEGIN
     );
 END
 
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Prestador' AND TABLE_SCHEMA = 'clinica')
+BEGIN
+    CREATE TABLE clinica.Prestador
+    (
+        Id_Prestador INT IDENTITY(1,1) PRIMARY KEY,
+        Nombre_Prestador VARCHAR(50) NOT NULL,
+        Plan_Prestador VARCHAR(50) NOT NULL,
+    );
+END
+
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Cobertura' AND TABLE_SCHEMA = 'clinica')
 BEGIN
     CREATE TABLE clinica.Cobertura
@@ -57,6 +67,8 @@ BEGIN
         Imagen_Credencial VARCHAR(100),
         Nro_Socio VARCHAR(50) NOT NULL,
         Fecha_Registro DATETIME NOT NULL,
+        Id_Prestador INT NOT NULL,
+        FOREIGN KEY (Id_Prestador) REFERENCES clinica.Prestador(Id_Prestador)
     );
 END
 
@@ -114,18 +126,6 @@ BEGIN
         Imagen_Resultado VARCHAR(100),
         Id_Historia_Clinica INT NOT NULL,
         FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
-    );
-END
-
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Prestador' AND TABLE_SCHEMA = 'clinica')
-BEGIN
-    CREATE TABLE clinica.Prestador
-    (
-        Id_Prestador INT PRIMARY KEY,
-        Nombre_Prestador VARCHAR(50) NOT NULL,
-        Plan_Prestador VARCHAR(50) NOT NULL,
-        Id_Cobertura INT NOT NULL,
-        FOREIGN KEY (Id_Cobertura) REFERENCES clinica.Cobertura(Id_Cobertura)
     );
 END
 
@@ -229,4 +229,19 @@ BEGIN
         FOREIGN KEY (Id_Medico) REFERENCES clinica.Medico(Id_Medico),
         FOREIGN KEY (Id_Sede) REFERENCES clinica.Sede_De_Atencion(Id_Sede)
     );
+END
+
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Tipo_Estudio' AND TABLE_SCHEMA = 'clinica')
+BEGIN
+    CREATE TABLE clinica.Tipo_Estudio
+    (
+        Id_Estudio VARCHAR(50) PRIMARY KEY,
+        Area VARCHAR(50),
+        Nombre_Estudio VARCHAR(50),
+        Prestador VARCHAR(50),
+        Plan_ VARCHAR(50),
+        Cobertura INT,
+        Costo INT,
+        Autorizacion BIT
+    )
 END

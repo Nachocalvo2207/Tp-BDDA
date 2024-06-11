@@ -1,10 +1,14 @@
 USE Com2900G03
 GO
 
-IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'clinicaImportar')
+IF NOT EXISTS (SELECT *
+FROM sys.schemas
+WHERE name = 'clinicaImportar')
     EXEC('CREATE SCHEMA clinicaImportar')
 GO
 
+DROP PROCEDURE IF EXISTS clinica.ImportarEstudios;
+GO
 
 CREATE OR ALTER PROCEDURE Clinica.ImportarEstudios
     @rutaArchivo NVARCHAR(MAX)
@@ -21,7 +25,7 @@ BEGIN
         Plan_ VARCHAR(50),
         Cobertura INT,
         Costo INT,
-        Autorizacion VARCHAR(50),
+        Autorizacion BIT
     )
 
     DECLARE @sql NVARCHAR(MAX) = 
@@ -65,20 +69,44 @@ BEGIN
         Plan_ VARCHAR(50) ''$.Plan'',
         Cobertura INT ''$."Porcentaje Cobertura"'',
         Costo INT ''$.Costo'',
-        Autorizacion VARCHAR(50) ''$."Requiere Autorizacion"''
+        Autorizacion BIT ''$."Requiere autorizacion"''
     )'
 
---Limpio datos(TAN DIFICIL IBA A SER ESTO?,):
---Quitamos Tildes
+    --Limpio datos:
+    --Quitamos Tildes
     EXEC sp_executesql @sql
 
-UPDATE clinica.tempEstudio
-SET Nombre_Estudio = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Nombre_Estudio, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ'),
-    Plan_ = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Plan_, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ');
+    UPDATE clinica.tempEstudio
+    SET Nombre_Estudio = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Nombre_Estudio, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ'),
+        Plan_ = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Plan_, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ');
+
+    --Inserto datos en la Tabla Tipo_Estudio
+    INSERT INTO clinica.Tipo_Estudio
+    (
+        Id_Estudio,
+        Area,
+        Nombre_Estudio,
+        Prestador,
+        Plan_,
+        Cobertura,
+        Costo,
+        Autorizacion
+    )
+    SELECT
+        Id_Estudio,
+        Area,
+        Nombre_Estudio,
+        Prestador,
+        Plan_,
+        Cobertura,
+        Costo,
+        Autorizacion
+    FROM clinica.tempEstudio
+    WHERE Id_Estudio NOT IN (SELECT Id_Estudio FROM clinica.Tipo_Estudio)
+    
 END
 GO
 
 -- Test
 
-EXEC Clinica.ImportarEstudios 'C:\Users\ic255011\OneDrive - Teradata\Escritorio\Nacho\Unlam\GitHub\Tp-BDDA\Dataset\Centro_Autorizaciones.Estudios clinicos.json'
 
