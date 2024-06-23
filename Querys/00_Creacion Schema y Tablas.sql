@@ -14,14 +14,10 @@
 
 
 -- Se crea la base de datos:
-IF NOT EXISTS(SELECT name FROM master.dbo.sysdatabases WHERE name = 'Com2900G03') 
-BEGIN 
-    CREATE DATABASE Com2900G03 COLLATE Modern_Spanish_CI_AS;
-END
+CREATE DATABASE Com2900G03 COLLATE Modern_Spanish_CI_AS;
 
 USE Com2900G03
 GO
-
 
 --Se crea el SCHEMA:
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'Clinica')
