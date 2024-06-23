@@ -5,9 +5,6 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'clinicaImportar')
     EXEC('CREATE SCHEMA clinicaImportar')
 GO
 
-DROP PROCEDURE IF EXISTS clinicaImportar.ImportarPacientes;
-GO
-
 --Funcion para capitalizar strings
 DROP FUNCTION IF EXISTS [Clinica].[InitCap] 
 GO
@@ -102,7 +99,7 @@ BEGIN
 
     -- 1. Crear la tabla temporal
     DROP TABLE IF EXISTS Clinica.PacienteTemporal
-    CREATE TABLE Clinica.PacienteTemporal
+    CREATE TABLE Clinica.#PacienteTemporal
     (
         Nombre VARCHAR(50),
         Apellido VARCHAR(50),
@@ -120,7 +117,7 @@ BEGIN
     );
 
 	DROP TABLE IF EXISTS Clinica.DomicilioTemporal
-    CREATE TABLE Clinica.DomicilioTemporal
+    CREATE TABLE Clinica.#DomicilioTemporal
     (
         Id_Domicilio INT IDENTITY(1,1) PRIMARY KEY,
         Direccion VARCHAR(100),
@@ -138,7 +135,7 @@ BEGIN
 
     DECLARE @ImportPacientes NVARCHAR(MAX)
     SET @ImportPacientes =
-    'BULK INSERT clinica.PacienteTemporal ' +
+    'BULK INSERT clinica.#PacienteTemporal ' +
     'FROM ''' + @rutaArchivo + ''' ' +
     'WITH ( ' +
     '    FIELDTERMINATOR = '';'', ' +
@@ -150,7 +147,7 @@ BEGIN
     EXEC sp_executesql @ImportPacientes
     
     -- Limpiar los datos:
-    UPDATE Clinica.PacienteTemporal
+    UPDATE Clinica.#PacienteTemporal
     SET Nombre = Nombre,
         Apellido = Apellido,
         Fecha_Nacimiento = CONVERT(DATE, Fecha_Nacimiento, 103),
@@ -166,7 +163,7 @@ BEGIN
     
     -- 3. Insertar los datos en la tabla domicilio temporal
 
-    INSERT INTO Clinica.DomicilioTemporal
+    INSERT INTO Clinica.#DomicilioTemporal
     (
         Direccion,
         Pais,
@@ -178,10 +175,10 @@ BEGIN
         Nacionalidad,
         Provincia,
         Localidad
-    FROM Clinica.PacienteTemporal
-	WHERE Direccion NOT IN (SELECT Direccion FROM Clinica.DomicilioTemporal);
+    FROM Clinica.#PacienteTemporal
+	WHERE Direccion NOT IN (SELECT Direccion FROM Clinica.#DomicilioTemporal);
 
-    UPDATE Clinica.DomicilioTemporal
+    UPDATE Clinica.#DomicilioTemporal
     SET Calle = [Clinica].[getFirstString](Direccion),
         Numero = [Clinica].[getFinalNumber](Direccion);
 
@@ -207,7 +204,7 @@ BEGIN
         Pais,
         Provincia,
         Localidad
-    FROM Clinica.DomicilioTemporal
+    FROM Clinica.#DomicilioTemporal
     WHERE Calle NOT IN (SELECT Calle FROM Clinica.Domicilio);
 
     -- 4. Insertar los datos en la tabla paciente
@@ -237,17 +234,15 @@ BEGIN
         Nacionalidad,
         Email,
         Id_Domicilio
-    FROM Clinica.PacienteTemporal JOIN Clinica.DomicilioTemporal ON Clinica.PacienteTemporal.Direccion = Clinica.DomicilioTemporal.Direccion
+    FROM Clinica.#PacienteTemporal JOIN Clinica.#DomicilioTemporal ON Clinica.#PacienteTemporal.Direccion = Clinica.#DomicilioTemporal.Direccion
     WHERE DNI NOT IN (SELECT Numero_Documento FROM Clinica.Paciente);
 
 	--SELECT * FROM Clinica.PacienteTemporal INNER JOIN Clinica.DomicilioTemporal 
 	--ON Clinica.PacienteTemporal.Direccion = Clinica.DomicilioTemporal.Direccion
 
     -- 5. Limpiar la tabla temporal
-    DROP TABLE Clinica.PacienteTemporal;
-    DROP TABLE Clinica.DomicilioTemporal;
+--    DROP TABLE Clinica.PacienteTemporal;
+ --   DROP TABLE Clinica.DomicilioTemporal;
 
 END
 GO
-
-

@@ -96,4 +96,3 @@ WHERE colegiado NOT IN (SELECT Nro_Matricula FROM clinica.Medico)
 DROP TABLE clinica.#tempMedico
 
 END
-

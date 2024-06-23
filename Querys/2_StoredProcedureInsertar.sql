@@ -9,7 +9,7 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'clinicaInsercion')
     EXEC('CREATE SCHEMA clinicaInsercion')
 GO
 
-CREATE PROCEDURE clinica.Insertar_Paciente
+CREATE OR ALTER PROCEDURE clinica.Insertar_Paciente
 (
     @Id_Historia_Clinica INT,
     @Nombre VARCHAR(50),
@@ -79,7 +79,7 @@ GO
 
 --Insertar Usuario
 
-CREATE PROCEDURE clinica.Insertar_Usuario
+CREATE OR ALTER PROCEDURE clinica.Insertar_Usuario
 (
     @Id_Usuario INT,
     @Contraseña VARCHAR(50),
@@ -107,7 +107,7 @@ GO
 
 --Insertar Estudio
 
-CREATE PROCEDURE clinica.Insertar_Estudio
+CREATE OR ALTER PROCEDURE clinica.Insertar_Estudio
 (
     @Id_Estudio INT,
     @Fecha DATE,
@@ -144,13 +144,13 @@ GO
 
 --Insertar Cobertura
 
-CREATE PROCEDURE clinica.Insertar_Cobertura
+CREATE OR ALTER PROCEDURE clinica.Insertar_Cobertura
 (
     @Id_Cobertura INT,
     @Imagen_Credencial VARCHAR(100),
     @Nro_Socio VARCHAR(50),
     @Fecha_Registro DATETIME,
-    @Id_Historia_Clinica INT
+    @Id_Prestador INT
 )
 AS
 BEGIN
@@ -160,7 +160,7 @@ BEGIN
         Imagen_Credencial,
         Nro_Socio,
         Fecha_Registro,
-        Id_Historia_Clinica
+        Id_Prestador
     )
     VALUES
     (
@@ -168,14 +168,14 @@ BEGIN
         @Imagen_Credencial,
         @Nro_Socio,
         @Fecha_Registro,
-        @Id_Historia_Clinica
+        @Id_Prestador
     );
 END;
 GO
 
 --Insertar Prestador
 
-CREATE PROCEDURE clinica.Insertar_Prestador
+CREATE OR ALTER PROCEDURE clinica.Insertar_Prestador
 (
     @Id_Prestador INT,
     @Nombre_Prestador VARCHAR(50),
@@ -188,22 +188,20 @@ BEGIN
     (
         Id_Prestador,
         Nombre_Prestador,
-        Plan_Prestador,
-        Id_Cobertura
+        Plan_Prestador
     )
     VALUES
     (
         @Id_Prestador,
         @Nombre_Prestador,
-        @Plan_Prestador,
-        @Id_Cobertura
+        @Plan_Prestador
     );
 END;
 GO
 
 --Insertar Domicilio
 
-CREATE PROCEDURE clinica.Insertar_Domicilio
+CREATE OR ALTER PROCEDURE clinica.Insertar_Domicilio
 (
     @Id_Domicilio INT,
     @Calle VARCHAR(50),
@@ -213,8 +211,7 @@ CREATE PROCEDURE clinica.Insertar_Domicilio
     @Codigo_Postal VARCHAR(50),
     @Pais VARCHAR(50),
     @Provincia VARCHAR(50),
-    @Localidad VARCHAR(50),
-    @Id_Historia_Clinica INT
+    @Localidad VARCHAR(50)
 )
 AS
 BEGIN
@@ -228,8 +225,7 @@ BEGIN
         Codigo_Postal,
         Pais,
         Provincia,
-        Localidad,
-        Id_Historia_Clinica
+        Localidad
     )
     VALUES
     (
@@ -241,15 +237,14 @@ BEGIN
         @Codigo_Postal,
         @Pais,
         @Provincia,
-        @Localidad,
-        @Id_Historia_Clinica
+        @Localidad
     );
 END;
 GO
 
 --Insertar Reserva Turno Medico
 
-CREATE PROCEDURE clinica.Insertar_Reserva_Turno_Medico
+CREATE OR ALTER PROCEDURE clinica.Insertar_Reserva_Turno_Medico
 (
     @Id_Turno INT,
     @Fecha DATE,
@@ -289,7 +284,7 @@ GO
 
 --Insertar Estado Turno
 
-CREATE PROCEDURE clinica.Insertar_Estado_Turno
+CREATE OR ALTER PROCEDURE clinica.Insertar_Estado_Turno
 (
     @Id_Estado INT,
     @Nombre_Estado VARCHAR(50)
@@ -311,7 +306,7 @@ GO
 
 --Insertar Tipo Turno
 
-CREATE PROCEDURE clinica.Insertar_Tipo_Turno
+CREATE OR ALTER PROCEDURE clinica.Insertar_Tipo_Turno
 (
     @Id_Tipo_Turno INT,
     @Nombre_Tipo_Turno VARCHAR(50)
@@ -333,7 +328,7 @@ GO
 
 --Insertar Dias Por Sede
 
-CREATE PROCEDURE clinica.Insertar_Dias_Por_Sede
+CREATE OR ALTER PROCEDURE clinica.Insertar_Dias_Por_Sede
 (
     @Id_Sede INT,
     @Id_Medico INT,
@@ -361,7 +356,7 @@ GO
 
 --Insertar Medico
 
-CREATE PROCEDURE clinica.Insertar_Medico
+CREATE OR ALTER PROCEDURE clinica.Insertar_Medico
 (
     @Id_Medico INT,
     @Nombre VARCHAR(50),
@@ -389,7 +384,7 @@ GO
 
 --Insertar Especialidad
 
-CREATE PROCEDURE clinica.Insertar_Especialidad
+CREATE OR ALTER PROCEDURE clinica.Insertar_Especialidad
 (
     @Id_Especialidad INT,
     @Nombre_Especialidad VARCHAR(50)
@@ -411,7 +406,7 @@ GO
 
 --Insertar Sede De Atencion
 
-CREATE PROCEDURE clinica.Insertar_Sede_De_Atencion
+CREATE OR ALTER PROCEDURE clinica.Insertar_Sede_De_Atencion
 (
     @Id_Sede INT,
     @Nombre_Sede VARCHAR(50),

@@ -12,7 +12,7 @@ GO
 
 --Eliminar Paciente
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Paciente
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Paciente
 (
     @Id_Historia_Clinica INT
 )
@@ -25,7 +25,7 @@ GO
 
 --Eliminar Usuario
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Usuario
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Usuario
 (
     @Id_Usuario INT
 )
@@ -56,7 +56,7 @@ GO
 
 --Eliminar Estudio
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Estudio
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Estudio
 (
     @Id_Estudio INT
 )
@@ -69,7 +69,7 @@ GO
 
 --Eliminar Cobertura
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Cobertura
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Cobertura
 (
     @Id_Cobertura INT
 )
@@ -82,7 +82,7 @@ GO
 
 --Eliminar Prestador
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Prestador
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Prestador
 (
     @Id_Prestador INT
 )
@@ -95,7 +95,7 @@ GO
 
 --Eliminar Domicilio
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Domicilio
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Domicilio
 (
     @Id_Domicilio INT
 )
@@ -108,7 +108,7 @@ GO
 
 --Eliminar Reserva Turno Medico
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Reserva_Turno_Medico
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Reserva_Turno_Medico
 (
     @Id_Turno INT
 )
@@ -121,7 +121,7 @@ GO
 
 --Eliminar Estado Turno
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Estado_Turno
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Estado_Turno
 (
     @Id_Estado INT
 )
@@ -134,7 +134,7 @@ GO
 
 --Eliminar Tipo Turno
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Tipo_Turno
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Tipo_Turno
 (
     @Id_Tipo_Turno INT
 )
@@ -147,7 +147,7 @@ GO
 
 --Eliminar Dias Por Sede
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Dias_Por_Sede
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Dias_Por_Sede
 (
     @Id_Sede INT
 )
@@ -160,7 +160,7 @@ GO
 
 --Eliminar Medico
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Medico
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Medico
 (
     @Id_Medico INT
 )
@@ -173,7 +173,7 @@ GO
 
 --Eliminar Especialidad
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Especialidad
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Especialidad
 (
     @Id_Especialidad INT
 )
@@ -186,7 +186,7 @@ GO
 
 --Eliminar Sede De Atencion
 
-CREATE PROCEDURE clinicaEliminar.Eliminar_Sede_De_Atencion
+CREATE OR ALTER PROCEDURE clinicaEliminar.Eliminar_Sede_De_Atencion
 (
     @Id_Sede INT
 )

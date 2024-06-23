@@ -59,3 +59,4 @@ WHERE a.Nombre_Sede NOT IN (SELECT Nombre_Sede FROM clinica.Sede_De_Atencion )
 DROP TABLE clinica.#tempSede
 
 END
+

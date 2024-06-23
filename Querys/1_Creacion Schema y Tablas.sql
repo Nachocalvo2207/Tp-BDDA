@@ -8,7 +8,7 @@
 * NOMBRE Y DNI DE LOS ALUMNOS: 
     1. Calvo Ignacio, 411162300
     2. Rossendy Federico, 37804899
-    3. Veliz Nicolas, xxxxxxxx
+    3. Veliz Nicolas, 42648268
 --------------------------------------------------------------*/
 
 
@@ -81,9 +81,9 @@ BEGIN
         Apellido VARCHAR(50) NOT NULL,
         Apellido_Materno VARCHAR(50),
         Fecha_Nacimiento DATE NOT NULL,
-        Tipo_Documento VARCHAR(10) NOT NULL,
+        Tipo_Documento VARCHAR(10) NOT NULL CHECK (Tipo_Documento IN ('DNI', 'LE', 'LC', 'CI', 'Pasaporte')),
         Numero_Documento INT NOT NULL,
-        Sexo_Biologico VARCHAR(10) NOT NULL,
+        Sexo_Biologico VARCHAR(10) NOT NULL CHECK (Sexo_Biologico IN ('Masculino', 'Femenino')),
         Genero VARCHAR(20) NOT NULL,
         Nacionalidad VARCHAR(50) NOT NULL,
         Foto_Perfil VARCHAR(100),
@@ -128,8 +128,6 @@ BEGIN
         FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
     );
 END
-
-
 
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Domicilio' AND TABLE_SCHEMA = 'clinica')
 BEGIN
@@ -210,11 +208,13 @@ BEGIN
         Id_Direccion_Atencion INT NOT NULL,
         Id_Estado_Turno INT NOT NULL,
         Id_Tipo_Turno INT NOT NULL,
+        Id_Historia_Clinica INT NOT NULL,
         FOREIGN KEY (Id_Medico) REFERENCES clinica.Medico(Id_Medico),
         FOREIGN KEY (Id_Especialidad) REFERENCES clinica.Especialidad(Id_Especialidad),
         FOREIGN KEY (Id_Direccion_Atencion) REFERENCES clinica.Sede_De_Atencion(Id_Sede),
         FOREIGN KEY (Id_Estado_Turno) REFERENCES clinica.Estado_Turno(Id_Estado),
-        FOREIGN KEY (Id_Tipo_Turno) REFERENCES clinica.Tipo_Turno(Id_Tipo_Turno)
+        FOREIGN KEY (Id_Tipo_Turno) REFERENCES clinica.Tipo_Turno(Id_Tipo_Turno),
+        FOREIGN KEY (Id_Historia_Clinica) REFERENCES clinica.Paciente(Id_Historia_Clinica)
     );
 END
 

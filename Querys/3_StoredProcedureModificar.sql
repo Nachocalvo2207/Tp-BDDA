@@ -7,7 +7,7 @@ GO
 
 --Modificar Paciente
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Paciente
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Paciente
 (
     @Id_Historia_Clinica INT,
     @Nombre VARCHAR(50),
@@ -55,7 +55,7 @@ GO
 
 --Modificar Usuario
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Usuario
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Usuario
 (
     @Id_Usuario INT,
     @Contraseña VARCHAR(50),
@@ -75,7 +75,7 @@ GO
 
 --Modificar Estudio
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Estudio
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Estudio
 (
     @Id_Estudio INT,
     @Fecha DATE,
@@ -100,7 +100,7 @@ GO
 
 --Modificar Cobertura
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Cobertura
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Cobertura
 (
     @Id_Cobertura INT,
     @Imagen_Credencial VARCHAR(100),
@@ -121,7 +121,7 @@ GO
 
 --Modificar Prestador
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Prestador
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Prestador
 (
     @Id_Prestador INT,
     @Nombre_Prestador VARCHAR(50),
@@ -140,7 +140,7 @@ GO
 
 --Modificar Domicilio
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Domicilio
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Domicilio
 (
     @Id_Domicilio INT,
     @Calle VARCHAR(50),
@@ -171,7 +171,7 @@ GO
 
 --Modificar Reserva_Turno_Medico
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Reserva_Turno_Medico
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Reserva_Turno_Medico
 (
     @Id_Turno INT,
     @Fecha DATE,
@@ -199,7 +199,7 @@ GO
 
 --Modificar Estado_Turno
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Estado_Turno
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Estado_Turno
 (
     @Id_Estado INT,
     @Nombre_Estado VARCHAR(50)
@@ -215,7 +215,7 @@ GO
 
 --Modificar Tipo_Turno
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Tipo_Turno
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Tipo_Turno
 (
     @Id_Tipo_Turno INT,
     @Nombre_Tipo_Turno VARCHAR(50)
@@ -231,7 +231,7 @@ GO
 
 --Modificar Dias_Por_Sede
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Dias_Por_Sede
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Dias_Por_Sede
 (
     @Id_Sede INT,
     @Id_Medico INT,
@@ -251,7 +251,7 @@ GO
 
 --Modificar Medico
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Medico
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Medico
 (
     @Id_Medico INT,
     @Nombre VARCHAR(50),
@@ -271,7 +271,7 @@ GO
 
 --Modificar Especialidad
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Especialidad
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Especialidad
 (
     @Id_Especialidad INT,
     @Nombre_Especialidad VARCHAR(50)
@@ -287,7 +287,7 @@ GO
 
 --Modificar Sede_De_Atencion
 
-CREATE PROCEDURE clinicaModificacion.Modificar_Sede_De_Atencion
+CREATE OR ALTER PROCEDURE clinicaModificacion.Modificar_Sede_De_Atencion
 (
     @Id_Sede INT,
     @Nombre_Sede VARCHAR(50),

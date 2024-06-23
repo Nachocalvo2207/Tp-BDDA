@@ -15,8 +15,8 @@ CREATE OR ALTER PROCEDURE Clinica.ImportarEstudios
 AS
 BEGIN
 
-    DROP TABLE IF EXISTS clinica.tempEstudio
-    CREATE TABLE clinica.tempEstudio
+    DROP TABLE IF EXISTS clinica.#tempEstudio
+    CREATE TABLE clinica.#tempEstudio
     (
         Id_Estudio VARCHAR(50) PRIMARY KEY,
         Area VARCHAR(50),
@@ -31,7 +31,7 @@ BEGIN
     DECLARE @sql NVARCHAR(MAX) = 
 
     
-    'INSERT INTO clinica.tempEstudio
+    'INSERT INTO clinica.#tempEstudio
     (
         Id_Estudio,
         Area,
@@ -76,7 +76,7 @@ BEGIN
     --Quitamos Tildes
     EXEC sp_executesql @sql
 
-    UPDATE clinica.tempEstudio
+    UPDATE clinica.#tempEstudio
     SET Nombre_Estudio = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Nombre_Estudio, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ'),
         Plan_ = REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Plan_, 'Ã¡', 'á'), 'Ã©', 'é'), 'Ã­', 'í'), 'Ã³', 'ó'), 'Ãº', 'ú'), 'Ã±', 'ñ');
 
@@ -101,12 +101,8 @@ BEGIN
         Cobertura,
         Costo,
         Autorizacion
-    FROM clinica.tempEstudio
+    FROM clinica.#tempEstudio
     WHERE Id_Estudio NOT IN (SELECT Id_Estudio FROM clinica.Tipo_Estudio)
     
 END
 GO
-
--- Test
-
-
