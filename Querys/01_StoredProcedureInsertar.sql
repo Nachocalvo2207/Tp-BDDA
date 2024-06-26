@@ -88,6 +88,24 @@ CREATE OR ALTER PROCEDURE clinica.Insertar_Usuario
 )
 AS
 BEGIN
+    IF @Fecha_Creacion > GETDATE()
+    BEGIN
+        RAISERROR('La Fecha_Creacion debe ser menor o igual al dia de hoy', 1, 1);
+        RETURN;
+    END
+
+    IF @Fecha_Creacion < '1900-01-01'
+    BEGIN
+        RAISERROR('La Fecha_Creacion debe ser mayor al 01/01/1900', 1, 1);
+        RETURN;
+    END
+
+    IF LEN(@Contraseña) < 12 
+    BEGIN
+        RAISERROR('La contraseña debe tener al menos 12 caracteres', 1, 1);
+        RETURN;
+    END
+
     INSERT INTO clinica.Usuario
     (
         Id_Usuario,
@@ -119,6 +137,17 @@ CREATE OR ALTER PROCEDURE clinica.Insertar_Estudio
 )
 AS
 BEGIN
+    IF @Fecha_Creacion > GETDATE()
+    BEGIN
+        RAISERROR('La Fecha_Creacion debe ser menor o igual al dia de hoy', 1, 1);
+        RETURN;
+    END
+
+    IF @Fecha_Creacion < '1900-01-01'
+    BEGIN
+        RAISERROR('La Fecha_Creacion debe ser mayor al 01/01/1900', 1, 1);
+        RETURN;
+    END
     INSERT INTO clinica.Estudio
     (
         Id_Estudio,
@@ -154,6 +183,17 @@ CREATE OR ALTER PROCEDURE clinica.Insertar_Cobertura
 )
 AS
 BEGIN
+    IF @Fecha_Creacion > GETDATE()
+    BEGIN
+        RAISERROR('La Fecha_Creacion debe ser menor o igual al dia de hoy', 1, 1);
+        RETURN;
+    END
+
+    IF @Fecha_Creacion < '1900-01-01'
+    BEGIN
+        RAISERROR('La Fecha_Creacion debe ser mayor al 01/01/1900', 1, 1);
+        RETURN;
+    END
     INSERT INTO clinica.Cobertura
     (
         Id_Cobertura,
@@ -184,6 +224,11 @@ CREATE OR ALTER PROCEDURE clinica.Insertar_Prestador
 )
 AS
 BEGIN
+IF @Nombre_Prestador NOT IN ('Union Personal', 'Osecac', 'Medicus', 'OSPOCE', 'OSDE')
+    BEGIN
+        RAISERROR('Nombre de prestador invalido', 1, 1);
+        RETURN;
+    END
     INSERT INTO clinica.Prestador
     (
         Id_Prestador,
@@ -391,6 +436,15 @@ CREATE OR ALTER PROCEDURE clinica.Insertar_Especialidad
 )
 AS
 BEGIN
+    IF @Nombre_Especialidad NOT IN ('CLINICA MEDICA', 'MEDICINA FAMILIAR', 'ALERGIA', 
+	'CARDIOLOGIA', 'DERMATOLOGIA', 'ENDOCRINLOGIA', 'FONOAUDIOLOGIA', 'GASTROENTEROLOGIA', 
+	'GINECOLOGIA', 'HEPATOLOGÍA', 'KINESIOLOGIA', 'NEUROLOGIA', 'NUTRICION', 'OBSTETRICIA', 
+	'OFTALMOLOGIA', 'TRAUMATOLOGIA', 'UROLOGIA')
+    BEGIN
+        RAISERROR('Nombre de especialidad invalido', 1, 1);
+        RETURN;
+    END
+
     INSERT INTO clinica.Especialidad
     (
         Id_Especialidad,
@@ -400,7 +454,7 @@ BEGIN
     (
         @Id_Especialidad,
         @Nombre_Especialidad
-    );
+    );
 END;
 GO
 
